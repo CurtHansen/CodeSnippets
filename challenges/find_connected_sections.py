@@ -9,8 +9,10 @@ input = [
 ['b','a','a','a','b', c']
 ['b','b','a','a','b', a']
 ]
-has five connected partitions.
+has five connected partitions. Among other facts, the 'a' in the bottom right is a different group from those in the
+top left.
 """
+
 
 def get_coords(node,
                direction,
