@@ -31,6 +31,22 @@ class BinaryNode(object):
 
         return result_l and result_r
 
+    def print_value(self):
+        print(self.value)
+        if self.left:
+            self.left.print_value()
+        if self.right:
+            self.right.print_value()
+
+    @property
+    def num_nodes_subtree(self):
+        def recur_num_nodes(node):
+            count = 1
+            num_left = recur_num_nodes(node.left) if node.left else 0
+            num_right = recur_num_nodes(node.right) if node.right else 0
+            return count + num_left + num_right
+        return recur_num_nodes(self)
+
 
 class BinaryTree(object):
 
@@ -54,44 +70,23 @@ class BinaryTree(object):
 
     def __recur_construct(self, json_entry):
         node = BinaryNode(json_entry['value'])
-        if isinstance(json_entry['left'], dict):
+        if json_entry.get('left', None) and isinstance(json_entry['left'], dict):
             node.left = self.__recur_construct(json_entry['left'])
         else:
             node.left = None
-        if isinstance(json_entry['right'], dict):
+        if json_entry.get('right', None) and isinstance(json_entry['right'], dict):
             node.right = self.__recur_construct(json_entry['right'])
         else:
             node.right = None
         return node
 
+    @property
+    def num_nodes(self):
+        return self.root.num_nodes_subtree
+
     def test_if_bst(self):
         return self.root.check_bst_condition(None, None)
 
-
-def main():
-    myjson = {
-        "value": 10,
-        "left": {
-            "value": 5,
-            "left": {"value": 1, "left": 'none', "right": 'none'},
-            "right": {
-                "value": 7,
-                "left": {'value': 6, 'left': 'none', 'right': 'none'},
-                "right": {'value': 10, 'left': 'none', 'right': 'none'}
-            }
-        },
-        "right": {
-            "value": 15,
-            "left": {"value": 11, "left": 'none', "right": 'none'},
-            "right": {"value": 20, "left": 'none', "right": 'none'}
-        }
-    }
-    mytree = BinaryTree()
-    mytree.construct((myjson))
-    return mytree
-
-
-if __name__ == '__main__':
-    mytree = main()
-    mytree
+    def print_all_node_values(self):
+        self.root.print_value()
 
