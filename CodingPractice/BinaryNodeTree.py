@@ -47,6 +47,14 @@ class BinaryNode(object):
             return count + num_left + num_right
         return recur_num_nodes(self)
 
+    def get_subtree_values(self):
+        def recur_subtree_values(node):
+            current_value = [node.value]
+            nodes_left = recur_subtree_values(node.left) if node.left else []
+            nodes_right = recur_subtree_values(node.right) if node.right else []
+            return current_value + nodes_left + nodes_right
+        return recur_subtree_values(self)
+
 
 class BinaryTree(object):
 
@@ -89,4 +97,7 @@ class BinaryTree(object):
 
     def print_all_node_values(self):
         self.root.print_value()
+
+    def return_tree_node_values(self):
+        return self.root.get_subtree_values()
 

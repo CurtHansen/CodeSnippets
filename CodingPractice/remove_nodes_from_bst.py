@@ -6,22 +6,27 @@
 #     self.left = None
 #     self.right = None
 
+import json
 from CodingPractice.BinaryNodeTree import BinaryTree
 
 
-def deleteFromBST(t, queries):
+def deleteFromBST(t, queries, debug=False):
     for query in queries:
-        t = process_query(t, query)
+        t = process_query(t, query, debug)
 
     return t
 
 
-def process_query(t, query):
+def process_query(t, query, debug=False):
     # First locate where query value is in tree.
     parent_node, target_node, side = find_node_with_value(t, query)
 
     if target_node:
+        if debug:
+            print(f'Removing node value {query}')
         t = remove_node_from_tree(t, target_node, parent_node, side)
+    elif debug:
+        print(f'Failed to find {query} in tree.')
 
     return t
 
@@ -141,100 +146,18 @@ def print_node_details(node):
 
 
 if __name__ == '__main__':
+
+    # Get data from JSON.
+    with open('/Users/curt//Downloads/test-9.json', 'r') as read_file:
+        mydict = json.load(read_file)
+
     tree = BinaryTree()
-    tree.construct(
-        {"value": -348761264,
-         "left": {
-             "value": -825429040,
-             "left": {
-                 "value": -976686917,
-                 "left": {
-                     "value": -981956058,
-                     "left": {
-                         "value": -998023278,
-                         "left": {
-                             "value": -998358422,
-                             "left": {
-                                 "value": -999581661,
-                                 "left": {
-                                     "value": -999862211,
-                                     "left": {"value": -999963773, "left": 'none', "right": 'none'},
-                                     "right": {"value": -999618835, "left": 'none', "right": 'none'}
-                                     },
-                                 "right": {
-                                     "value": -999357649,
-                                     "left": {
-                                         "value": -999382814,
-                                         "left": 'none',
-                                         "right": 'none'
-                                         },
-                                     "right": {
-                                         "value": -998814090,
-                                         "left": 'none',
-                                         "right": 'none'
-                                         }
-                                     }
-                                 },
-                             "right": {
-                                 "value": -998211991,
-                                 "left": {
-                                     "value": -998245361,
-                                     "left": {
-                                         "value": -998261431,
-                                         "left": 'none',
-                                         "right": 'none'
-                                         },
-                                     "right": {
-                                         "value": -998224931,
-                                         "left": 'none',
-                                         "right": 'none'
-                                         }
-                                     },
-                                 "right": {
-                                     "value": -998118656,
-                                     "left": {
-                                         "value": -998133050,
-                                         "left": 'none',
-                                         "right": 'none'
-                                         },
-                                     "right": {
-                                         "value": -998036818,
-                                         "left": 'none',
-                                         "right": 'none'
-                                         }
-                                     }
-                                 }
-                             },
-                         "right": {
-                             "value": -984096674,
-                             "left": {
-                                 "value": -993780062,
-                                 "left": {
-                                     "value": -997344052
-                                     }
-                                 }
-                             }
-                        }
-                    }
-                }
-            }
-        })
-    print("Tree is binary before?: {}".format(tree.test_if_bst()))
+    tree.construct(mydict['input']['t'])
+    print("\nTree is binary before?: {}".format(tree.test_if_bst()))
     tree.print_all_node_values()
-    queries = [-942765665, -942765799, -942765737, -942765498, 962368765, 235142701, -714600801,
-               -982067056, 964682986, -761033710, 310778828, -827890484, 857499512, 839480959, 955426856,
-               -167019043, -944237440, -942765469, -942765755, 656603678, -942765839, 671700394, -476502379,
-               808433215, -942765485, -942765577, -331908252, -942765350, -999382814, 791787847, 342619150,
-               -639529093, 433793200, -942765668, 298090578, -942765622, 825468534, -769677309, 508148726,
-               118384372, -693287205, -652515683, -315716303, 924893700, 534067828, -942765506, -942765748,
-               -785066678, 749739118, -655911547, -453449372, -976929768, -485673863, -942765512, -941092796,
-               -942765589, -942765848, 42080873, -807853592, -942765647, 999792215, -654181579, -981902698,
-               -201505833, 71733414, -942765546, -330636437, -852265269, 537933165, -942765334, -945679402,
-               -766602683, 421602203, -824328207, 925144665, 612771300, -479966609, -253189773, -942765653,
-               232193464, -622563971, -697384186, -788097692, -942765399, 338834359, 524573958, -942765619,
-               2775195, -942765494, -191430959, -612483461, -942765836, -908777947, -346971194, -777546827,
-               333481626, 668866012, -428303986, -942765652, -942765811]
-    result_root = deleteFromBST(t=tree.root, queries=queries)
+
+    queries = mydict['input']['queries']
+    result_root = deleteFromBST(t=tree.root, queries=queries, debug=True)
     tree.root = result_root
-    print("Tree is binary after?: {}".format(tree.test_if_bst()))
+    print("\nTree is binary after?: {}".format(tree.test_if_bst()))
     tree.print_all_node_values()
